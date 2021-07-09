@@ -4,7 +4,7 @@
 
 Send and receive Peppol invoices.
 
-This module is meant to run as a backend service, you can combine it with https://github.com/pondersource/invoice-gateway for the GUI part.
+This module is designed to run as a separate backend service, for instance on Amazon Lambda. It contains the code needed to execute webhooks for incoming and outgoing business documents. You can combine it with https://github.com/pondersource/invoice-gateway and for the GUI part, so users can connect their bookkeeping system, go through KYC checks, etcetera.
 
 Example using an AP+SMP provider like Acube or Storecove:
 ```js
@@ -60,4 +60,34 @@ peppol.connect('NLKVK::12345678', {
   autoSend: true,
   autoReceive: true,
 });
+```
+
+# Example
+
+Edit `./creds.js`:
+```js
+module.exports = {
+  // Contact antonino.caccamo@a-cube.io to become a reseller of A-Cube, and fill in the credentials
+  // you get from them, here:
+  acube: {
+    email: "...",
+    password: "..."
+  },
+  // Use https://invoice-gateway.herokuapp.com to obtain a Quickbooks access token for your sandbox
+  // company there:
+  quickbooks: {
+    "x_refresh_token_expires_in": ...,
+    "refresh_token": "...",
+    "access_token": "...",
+    "token_type": "bearer",
+    "expires_in": ...
+  }
+};
+```
+
+Now run:
+```sh
+npm ci
+npm run build
+node ./example.js
 ```
