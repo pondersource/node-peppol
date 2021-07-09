@@ -1,7 +1,8 @@
-import { HelloWorld } from "../src/index";
+import { Peppol } from "../src/index";
 
-describe("HelloWorld", () => {
-  it("returns hello world", () => {
-    expect(HelloWorld()).toEqual("hello, world");
+describe("Peppol", () => {
+  it("exists", () => {
+    const peppol = new Peppol("");
+    expect(typeof peppol).toEqual("object");
   });
 });
