@@ -11,24 +11,29 @@ export class Peppol {
     this.webhooksRoot = webhooksRoot;
     this.users = {};
   }
+  async registerWebhook(event): Promise<void> {
+    console.log('registering webhook', event);
+    const result = await fetch(
+      "https://peppol-sandbox.api.acubeapi.com/webhooks",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.session.token}`,
+        },
+        body: JSON.stringify({
+          event,
+          url: `${this.webhooksRoot}/acube-incoming`,
+        }),
+      }
+    );
+    console.log(result);
+  }
   async addService(definition): Promise<void> {
     this.service = definition;
     if (this.webhooksRoot) {
-      const result = await fetch(
-        "https://peppol-sandbox.api.acubeapi.com/webhooks",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.session.token}`,
-          },
-          body: JSON.stringify({
-            event: "incoming-document",
-            url: `${this.webhooksRoot}/acube-incoming`,
-          }),
-        }
-      );
-      console.log(result);
+      await this.registerWebhook("incoming-document");
+      await this.registerWebhook("outgoing-document");
     }
   }
   async ensureSession(): Promise<void> {
@@ -68,6 +73,13 @@ export class Peppol {
     res: ServerResponse
   ): Promise<void> {
     console.log(req.url);
+    let str = '';
+    req.on('data', (chunk) => {
+      str += chunk;
+    });
+    req.on('end', () => {
+      console.log('webhook post body', str);
+    });
     res.writeHead(200);
     res.end("OK");
   }
