@@ -64,30 +64,11 @@ peppol.connect('NLKVK::12345678', {
 
 # Example
 
-Edit `./creds.js`:
-```js
-module.exports = {
-  // Contact antonino.caccamo@a-cube.io to become a reseller of A-Cube, and fill in the credentials
-  // you get from them, here:
-  acube: {
-    email: "...",
-    password: "..."
-  },
-  // Use https://invoice-gateway.herokuapp.com to obtain a Quickbooks access token for your sandbox
-  // company there:
-  quickbooks: {
-    "x_refresh_token_expires_in": ...,
-    "refresh_token": "...",
-    "access_token": "...",
-    "token_type": "bearer",
-    "expires_in": ...
-  }
-};
-```
-
-Now run:
-```sh
-npm ci
-npm run build
-node ./example.js
-```
+* Look up A-Cube S.r.l. on https://peppol.eu/who-is-who/certified-as4-peppol-service-providers/ and ask them if you can become a reseller of their AP+SMP service (support for Storecove, AdValvas and others coming soon!).
+* Use https://invoice-gateway.herokuapp.com to obtain a Quickbooks access token for your sandbox company.
+* Deploy this code to for instance https://peppol.herokuapp.com
+* Set the `CREDS` environment variable to
+  ```json
+    {"acube":{"email":"...","password":"..."},"quickbooks":{"access_token":"..."}}
+  ```
+* Set the `WEBHOOKS_ROOT` environment variable to for instance https://peppol.herokuapp.com/webhooks

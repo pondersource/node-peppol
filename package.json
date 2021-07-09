@@ -15,7 +15,7 @@
     "postversion": "git push && git push --tags && npm publish",
     "prettier": "prettier --write \"{src,test,__mocks__}/**/*.ts\"",
     "preversion": "npm test",
-    "start": "node lib/examples/basic",
+    "start": "node lib/server",
     "test": "npm run build && npm run lint && npm run jest",
     "version": "npm run build"
   },

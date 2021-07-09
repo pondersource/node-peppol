@@ -1,11 +1,35 @@
 import * as fetch from "node-fetch";
+import { IncomingMessage, ServerResponse } from "http";
+export const INTEGRATION_QUICKBOOKS = "quickbooks";
 
 export class Peppol {
   service: any;
   session: any;
-  constructor() {}
-  addService(definition) {
+  users: any;
+  webhooksRoot: string;
+  constructor(webhooksRoot: string) {
+    this.webhooksRoot = webhooksRoot;
+    this.users = {};
+  }
+  async addService(definition) {
     this.service = definition;
+    if (this.webhooksRoot) {
+      const result = await fetch(
+        "https://peppol-sandbox.api.acubeapi.com/webhooks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.session.token}`,
+          },
+          body: JSON.stringify({
+            event: "incoming-document",
+            url: `${this.webhooksRoot}/acube-incoming`,
+          }),
+        }
+      );
+      console.log(result);
+    }
   }
   async ensureSession() {
     if (this.session) {
@@ -38,5 +62,19 @@ export class Peppol {
       }
     );
     console.log("invoice sent", result);
+  }
+  async handleWebhook(req: IncomingMessage, res: ServerResponse) {
+    console.log(req.url);
+    res.writeHead(200);
+    res.end('OK');
+  }
+  connect(
+    peppolId: string,
+    options: {
+      integration: string;
+      integrationAccess: string;
+    }
+  ): void {
+    this.users[peppolId] = options;
   }
 }
