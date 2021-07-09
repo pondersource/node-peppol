@@ -1,5 +1,5 @@
 {
-  "name": "MODULE_NAME_REPLACE_ME",
+  "name": "node-peppol",
   "version": "0.0.1",
   "description": "",
   "main": "./lib/index.js",
@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pondersource/REPO_NAME_REPLACE_ME.git"
+    "url": "git+https://github.com/pondersource/node-peppol.git"
   },
   "author": "Michiel B. de Jong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pondersource/REPO_NAME_REPLACE_ME/issues"
+    "url": "https://github.com/pondersource/node-peppol/issues"
   },
-  "homepage": "https://github.com/pondersource/REPO_NAME_REPLACE_ME#readme",
+  "homepage": "https://github.com/pondersource/node-peppol#readme",
   "devDependencies": {
     "@babel/cli": "^7.14.5",
     "@babel/core": "^7.14.6",
