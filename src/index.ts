@@ -11,7 +11,7 @@ export class Peppol {
     this.webhooksRoot = webhooksRoot;
     this.users = {};
   }
-  async addService(definition) {
+  async addService(definition): Promise<void> {
     this.service = definition;
     if (this.webhooksRoot) {
       const result = await fetch(
@@ -31,7 +31,7 @@ export class Peppol {
       console.log(result);
     }
   }
-  async ensureSession() {
+  async ensureSession(): Promise<void> {
     if (this.session) {
       return;
     }
@@ -48,7 +48,7 @@ export class Peppol {
     this.session = await result.json();
     console.log("Acube session open", this.session);
   }
-  async send(invoice: Buffer) {
+  async send(invoice: Buffer): Promise<void> {
     await this.ensureSession();
     const result = await fetch(
       "https://peppol-sandbox.api.acubeapi.com/invoices/outgoing/ubl",
@@ -63,10 +63,13 @@ export class Peppol {
     );
     console.log("invoice sent", result);
   }
-  async handleWebhook(req: IncomingMessage, res: ServerResponse) {
+  async handleWebhook(
+    req: IncomingMessage,
+    res: ServerResponse
+  ): Promise<void> {
     console.log(req.url);
     res.writeHead(200);
-    res.end('OK');
+    res.end("OK");
   }
   connect(
     peppolId: string,
