@@ -2,17 +2,27 @@ import * as fetch from "node-fetch";
 import { IncomingMessage, ServerResponse } from "http";
 export const INTEGRATION_QUICKBOOKS = "quickbooks";
 
+export type ServiceDefinition = {
+  email: string;
+  password: string;
+};
+
 export class Peppol {
-  service: any;
-  session: any;
-  users: any;
+  service: ServiceDefinition;
+  session: { token: string };
+  users: {
+    [index: string]: {
+      integration: string;
+      integrationAccess: string;
+    };
+  };
   webhooksRoot: string;
   constructor(webhooksRoot: string) {
     this.webhooksRoot = webhooksRoot;
     this.users = {};
   }
-  async registerWebhook(event): Promise<void> {
-    console.log('registering webhook', event);
+  async registerWebhook(event: string): Promise<void> {
+    console.log("registering webhook", event);
     const result = await fetch(
       "https://peppol-sandbox.api.acubeapi.com/webhooks",
       {
@@ -29,7 +39,7 @@ export class Peppol {
     );
     console.log(result);
   }
-  async addService(definition): Promise<void> {
+  async addService(definition: ServiceDefinition): Promise<void> {
     this.service = definition;
     if (this.webhooksRoot) {
       await this.registerWebhook("incoming-document");
@@ -73,12 +83,12 @@ export class Peppol {
     res: ServerResponse
   ): Promise<void> {
     console.log(req.url);
-    let str = '';
-    req.on('data', (chunk) => {
+    let str = "";
+    req.on("data", (chunk) => {
       str += chunk;
     });
-    req.on('end', () => {
-      console.log('webhook post body', str);
+    req.on("end", () => {
+      console.log("webhook post body", str);
     });
     res.writeHead(200);
     res.end("OK");
